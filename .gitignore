@@ -1,7 +1,11 @@
 .idea/
+*.iml
+
 .gradle/
 gradle/
 
 build/
 out/
 target/
+
+*.db

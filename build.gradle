@@ -17,6 +17,8 @@ dependencies {
     compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.5'
     compile group: 'commons-io', name: 'commons-io', version: '2.5'
     compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
+    compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.23.1'
+    compile group: 'org.asm-labs', name: 'junrar', version: '0.8'
 
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
