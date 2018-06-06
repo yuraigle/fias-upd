@@ -10,10 +10,16 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Main extends Application {
 
     public static final Logger logger = LoggerFactory.getLogger("LG_ROOT");
+
+    public static Connection connUp() throws ClassNotFoundException, SQLException {
+        Class.forName("org.sqlite.JDBC");
+        return DriverManager.getConnection("jdbc:sqlite:fias.db");
+    }
 
     public static void main(String[] args) {
         launch(args);

@@ -3,14 +3,13 @@ package ru.irkoms.fias;
 import com.github.junrar.extract.ExtractArchive;
 import javafx.concurrent.Task;
 import org.apache.commons.io.FileUtils;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.sql.Connection;
 
 public class TaskFullUpdate extends Task {
     private File arc;
@@ -23,11 +22,12 @@ public class TaskFullUpdate extends Task {
     @Override
     protected Object call() throws Exception {
         updateMessage("Распаковка...");
-//        extract();
-        updateMessage("Готово");
+        extract();
+        updateMessage("Обработка");
 
         FileUtils.listFiles(tmpDir, null, false)
                 .forEach(this::process);
+        updateMessage("Готово");
 
         return null;
     }
@@ -40,25 +40,32 @@ public class TaskFullUpdate extends Task {
             FileUtils.forceMkdir(tmpDir);
             ExtractArchive extractArchive = new ExtractArchive();
             extractArchive.extractArchive(arc, tmpDir);
-            System.out.println(arc.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     private void process(File f) {
-        String typ = f.getName().replaceAll("_\\d{8}_.*", "");
+        String type = f.getName().substring(3).replaceAll("_\\d{8}_.*", "");
+        updateMessage("Обработка " + type + "...");
 
-        if (typ.equals("AS_DEL_ADDROBJ")) {
-            System.out.println(f.getAbsolutePath());
-
+        if (type.equals("ADDROBJ")) {
             try {
+                FiasHandler handler = new FiasHandler(type);
+
+                // full update: drop & create table
+                Connection c = Main.connUp();
+                String sql = "DROP TABLE IF EXISTS " + type + "; ";
+                c.createStatement().execute(sql);
+                sql = "CREATE TABLE " + type + " (" +
+                        String.join(" TEXT, ", handler.getProps()) + " TEXT)";
+                c.createStatement().execute(sql);
+                c.close();
+
                 SAXParserFactory factory = SAXParserFactory.newInstance();
                 SAXParser saxParser = factory.newSAXParser();
-
-                saxParser.parse(f, new FiasHandler());
-
-            } catch (SAXException | ParserConfigurationException | IOException e) {
+                saxParser.parse(f, handler);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 
