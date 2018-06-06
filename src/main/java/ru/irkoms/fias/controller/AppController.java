@@ -1,6 +1,5 @@
 package ru.irkoms.fias.controller;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
@@ -52,10 +51,6 @@ public class AppController {
 
         Stage mainStage = (Stage) lblActual.getScene().getWindow();
         return chooser.showOpenDialog(mainStage);
-    }
-
-    public void actExit() {
-        Platform.exit();
     }
 
     public void actFull() {

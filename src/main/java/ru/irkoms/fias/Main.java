@@ -27,23 +27,11 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Connection c;
-
-        try {
-            Class.forName("org.sqlite.JDBC");
-            c = DriverManager.getConnection("jdbc:sqlite:fias.db");
-            c.close();
-        } catch (Exception e) {
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
-        }
-        System.out.println("Opened database successfully");
-
         logger.info("App start");
 
         Parent root = FXMLLoader.load(getClass().getResource("/app.fxml"));
         primaryStage.setTitle("Обновление ФИАС");
-        primaryStage.setScene(new Scene(root, 490, 135));
+        primaryStage.setScene(new Scene(root, 390, 135));
         primaryStage.centerOnScreen();
         primaryStage.show();
     }
