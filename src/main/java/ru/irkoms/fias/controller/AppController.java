@@ -24,7 +24,7 @@ public class AppController {
     TextField txFilter;
 
     public void initialize() {
-        lblActual.setText("Используется версия от: " + getCurrentVer());
+        lblCurrent.setText("Используется версия от: " + getCurrentVer());
         lblActual.setText("Актуальная на сайте ФИАС: " + getNewestVer());
     }
 
@@ -36,6 +36,9 @@ public class AppController {
             ResultSet rs = c.createStatement().executeQuery("pragma user_version");
             if (rs.next()) {
                 ver = rs.getString(1);
+                if (ver.matches("^\\d{8}")) {
+                    ver = ver.replaceAll("(\\d{4})(\\d{2})(\\d{2})", "$3.$2.$1");
+                }
             }
             c.close();
         } catch (ClassNotFoundException | SQLException e) {

@@ -28,7 +28,7 @@ public class TaskFullUpdate extends Task {
     @Override
     protected Object call() throws Exception {
         updateMessage("Распаковка...");
-//        extract();
+        extract();
         updateMessage("Обработка");
 
         FileUtils.listFiles(tmpDir, null, false)
@@ -37,7 +37,6 @@ public class TaskFullUpdate extends Task {
         updateMessage("Пост-обработка");
 
         Connection c = Main.connUp();
-        // чет не работает pragma
         c.createStatement().execute("pragma user_version = " + ver + ";");
         c.close();
 
@@ -72,7 +71,7 @@ public class TaskFullUpdate extends Task {
 
                 // full update: drop & create table
                 Connection c = Main.connUp();
-                String sql = "DROP TABLE IF EXISTS " + type;
+                String sql = "DROP TABLE IF EXISTS " + type + "; VACUUM;";
                 c.createStatement().execute(sql);
                 sql = "CREATE TABLE " + type + " (" + String.join(", ", handler.getPropsDb()) + ")";
                 c.createStatement().execute(sql);
