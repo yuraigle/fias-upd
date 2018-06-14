@@ -28,10 +28,17 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         logger.info("App start");
+//
+//        Connection c = Main.connUp();
+//        String sql = "pragma user_version = 20180528";
+//        System.out.println(sql);
+//        c.createStatement().execute(sql);
+//        c.commit();
+//        c.close();
 
         Parent root = FXMLLoader.load(getClass().getResource("/app.fxml"));
         primaryStage.setTitle("Обновление ФИАС");
-        primaryStage.setScene(new Scene(root, 390, 135));
+        primaryStage.setScene(new Scene(root, 390, 170));
         primaryStage.centerOnScreen();
         primaryStage.show();
     }

@@ -2,15 +2,16 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" prefHeight="135.0" prefWidth="390.0"
-            xmlns="http://javafx.com/javafx" fx:controller="ru.irkoms.fias.controller.AppController">
+<AnchorPane prefHeight="170.0" prefWidth="390.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ru.irkoms.fias.controller.AppController">
     <Label fx:id="lblCurrent" layoutX="14.0" layoutY="14.0" text="Используется версия от:"/>
     <Label fx:id="lblActual" layoutX="14.0" layoutY="41.0" text="Актуальная на сайте ФИАС:"/>
-    <Button layoutX="14.0" layoutY="75.0" mnemonicParsing="false" onAction="#actDelta" prefHeight="25.0"
+    <Button layoutX="14.0" layoutY="110.0" mnemonicParsing="false" onAction="#actDelta" prefHeight="25.0"
             prefWidth="175.0" text="Загрузить обновление"/>
-    <Button layoutX="195.0" layoutY="75.0" mnemonicParsing="false" onAction="#actFull" prefHeight="25.0"
+    <Button layoutX="195.0" layoutY="110.0" mnemonicParsing="false" onAction="#actFull" prefHeight="25.0"
             prefWidth="175.0" text="Загрузить целиком"/>
+    <TextField fx:id="txFilter" layoutX="149.0" layoutY="67.0" prefHeight="25.0" prefWidth="50.0"/>
     <Label fx:id="lblStatus" layoutX="14.0" layoutY="113.0" prefHeight="17.0" prefWidth="461.0"
-           AnchorPane.bottomAnchor="5.0"
-           AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0"/>
+           AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0"/>
+    <Label layoutX="14.0" layoutY="71.0" text="Фильтр по региону:"/>
 </AnchorPane>

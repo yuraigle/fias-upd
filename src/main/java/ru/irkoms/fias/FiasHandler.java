@@ -15,23 +15,35 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static org.apache.commons.lang.StringUtils.isNotBlank;
+
 public class FiasHandler extends DefaultHandler {
     private Boolean isRootElement = true;
     private List<String> props = new ArrayList<>();
+    private List<String> propsDb = new ArrayList<>();
     private Connection conn;
     private PreparedStatement preparedInsert;
     private Integer cntInBatch = 0;
     private String type;
+    private String region;
 
-    public FiasHandler(String type) {
+    public FiasHandler(String type, String region) {
         this.type = type;
-        InputStream is = getClass().getResourceAsStream("/" + type + ".txt");
+        this.region = region;
+        InputStream is = getClass().getResourceAsStream("/schema/" + type + ".txt");
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        reader.lines().forEach(s -> props.add(s));
+        reader.lines().forEach(s -> {
+            props.add(s.split("\\s+")[0]);
+            propsDb.add(s);
+        });
     }
 
     public List<String> getProps() {
         return props;
+    }
+
+    public List<String> getPropsDb() {
+        return propsDb;
     }
 
     @Override
@@ -59,13 +71,17 @@ public class FiasHandler extends DefaultHandler {
         Map<String, String> obj = new HashMap<>();
         props.forEach(k -> obj.put(k, attributes.getValue(k)));
 
+        if (isNotBlank(region) && props.contains("REGIONCODE")
+                && attributes.getValue("REGIONCODE") != null && !attributes.getValue("REGIONCODE").equals(region))
+            return;
+
         try {
             preparedInsert.clearParameters();
             for (int i = 0; i < props.size(); i++) {
                 preparedInsert.setString(i + 1, obj.get(props.get(i)));
             }
             preparedInsert.addBatch();
-            if (++cntInBatch % 1000 == 0) {
+            if (++cntInBatch % 10000 == 0) {
                 preparedInsert.executeBatch();
                 conn.commit();
             }
